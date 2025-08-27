@@ -1,26 +1,32 @@
-name: CI - Cypress Tests
+name: Cypress Tests
 
 on:
   push:
-    branches:
-      - main  # ou master selon ton repo
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  test:
+  cypress-run:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
-        run: npm run test # Assure-toi que cette commande lance tes tests Cypress
-        continue-on-error: true # pour capturer l'état du build même en cas d'erreur
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v6
+        with:
+          build: npm run build   # facultatif si tu as un build (ex: React, Angular, Svelte...)
+          start: npm start       # idem, si ton app doit démarrer avant les tests
+          wait-on: 'http://localhost:3000'  # attends que l'app soit dispo
+          wait-on-timeout: 120
+          command: npm run test:e2e  # commande pour lancer les tests Cypress
