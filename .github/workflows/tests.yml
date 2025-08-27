@@ -31,12 +31,3 @@ jobs:
         with:
           name: test-report
           path: cypress/reports  # chemin vers ton rapport de tests
-
-      - name: Notify Discord
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          content: |
-            Build terminé pour le commit ${{ github.sha }}
-            Statut: ${{ job.status }}
