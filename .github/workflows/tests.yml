@@ -11,22 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
-          build: npm run build   # facultatif si tu as un build (ex: React, Angular, Svelte...)
-          start: npm start       # idem, si ton app doit démarrer avant les tests
-          wait-on: 'http://localhost:3000'  # attends que l'app soit dispo
-          wait-on-timeout: 120
-          command: npm run test:e2e  # commande pour lancer les tests Cypress
+          start: npx http-server . -p 8080   # sert ton dossier avec http-server
+          wait-on: http://localhost:8080     # attend que le serveur soit dispo
+          browser: chrome
