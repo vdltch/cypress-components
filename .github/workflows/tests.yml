@@ -1,0 +1,43 @@
+name: CI - Cypress Tests
+
+on:
+  push:
+    branches:
+      - main  # ou master selon ton repo
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm run test # Assure-toi que cette commande lance tes tests Cypress
+        continue-on-error: true # pour capturer l'état du build même en cas d'erreur
+
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: cypress/reports  # chemin vers ton rapport de tests
+
+      - name: Notify Discord
+        if: always()  # pour notifier même si le build échoue
+        uses: tsickert/discord-webhook-action@v7
+        with:
+          webhook_id: ${{ 1410227866330988729 }}
+          webhook_token: ${{ KiQ9CE0OqxV_wgXg80CwIXTeXx5MWYzpYycvNWeuzegjDIMda7EDQGawpP1bqRnBbnuy }}
+          message: |
+            Build terminé pour le commit ${{ github.sha }}
+            Statut: ${{ job.status }}
