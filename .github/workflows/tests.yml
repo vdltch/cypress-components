@@ -29,7 +29,6 @@ jobs:
         if: always()
         uses: Ilshidur/action-discord@master
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
           args: |
             **Build terminé**
             Commit : ${{ github.sha }}
