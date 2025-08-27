@@ -33,11 +33,10 @@ jobs:
           path: cypress/reports  # chemin vers ton rapport de tests
 
       - name: Notify Discord
-        if: always()  # pour notifier même si le build échoue
+        if: always()
         uses: tsickert/discord-webhook-action@v7
         with:
-          webhook_id: ${{ 1410227866330988729 }}
-          webhook_token: ${{ KiQ9CE0OqxV_wgXg80CwIXTeXx5MWYzpYycvNWeuzegjDIMda7EDQGawpP1bqRnBbnuy }}
-          message: |
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          content: |
             Build terminé pour le commit ${{ github.sha }}
             Statut: ${{ job.status }}
