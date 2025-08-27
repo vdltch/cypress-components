@@ -34,7 +34,7 @@ jobs:
 
       - name: Notify Discord
         if: always()
-        uses: tsickert/discord-webhook-action@v7
+        uses: actions/upload-artifact@v2
         with:
           webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
           content: |
